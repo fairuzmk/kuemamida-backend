@@ -8,8 +8,8 @@ const customOrderSchema = new mongoose.Schema({
     basePrice: { type: Number, required: true },
     totalPrice: { type: Number }, // termasuk add-on
   
-    cakeSize: { type: String, enum: ['16', '18', '20', '22', 'custom'], required: true },
-    cakeShape: { type: String, enum: ['round', 'square', 'custom'] },
+    cakeSize: { type: String, enum: ['16', '18', '20', '22', 'Custom'], required: true },
+    cakeShape: { type: String, enum: ['Round', 'Square', 'Custom'] },
 
     cakeFlavor: { type: String, required: true },
     krimFlavor: {type: String},
@@ -23,13 +23,16 @@ const customOrderSchema = new mongoose.Schema({
     addOn : {type: String},
     addOnPrice: {type: Number},
 
-    additionalImages: {type: String}, // referensi dari pelanggan (URL gambar)
+    additionalImages: {
+      url: String,
+      public_id: String,
+    },
     
     pickupDate: { type: Date},
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'in-progress', 'ready', 'completed', 'cancelled'],
-      default: 'pending',
+      enum: ['Pending', 'Confirmed', 'In-progress', 'Ready', 'Completed', 'Cancelled'],
+      default: 'Pending',
     },
   
     createdAt: { type: Date, default: Date.now },

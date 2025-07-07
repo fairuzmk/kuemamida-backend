@@ -7,18 +7,22 @@ import {
 } from "../controllers/customOrderController.js";
 
 import multer from "multer";
+import { customOrderUpload } from "../utils/cloudinary.js";
+
 
 const customOrderRouter = express.Router();
 
-// Image Storage Engine for Custom Orders
-const storage = multer.diskStorage({
-  destination: "uploads/custom",
-  filename: (req, file, cb) => {
-    return cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
+// // Image Storage Engine for Custom Orders
+// const storage = multer.diskStorage({
+//   destination: "uploads/custom",
+//   filename: (req, file, cb) => {
+//     return cb(null, `${Date.now()}-${file.originalname}`);
+//   }
+// });
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
+
+const upload = multer({ storage: customOrderUpload });
 
 // --- Routes ---
 

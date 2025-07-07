@@ -6,13 +6,14 @@ import fs from 'fs';
 
 const addFood = async(req,res) => {
 
-    let image_filename = `${req.file.filename}`;
+    // let image_filename = `${req.file.filename}`;
+    const image_url = req.file?.path || "";
 
     const food = new foodModel({
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
-        image: image_filename,
+        image: image_url,
         category: req.body.category,
         stock: req.body.stock,
         rating: req.body.rating,
@@ -47,11 +48,12 @@ const editFood = async (req, res) => {
   
       // Jika ada file baru dikirim, update image
       if (req.file) {
-        const oldFood = await foodModel.findById(id);
-        if (oldFood.image) {
-          fs.unlink(`uploads/${oldFood.image}`, () => {}); // hapus gambar lama
-        }
-        updatedData.image = req.file.filename;
+        const image_url = req.file.path;
+        // const oldFood = await foodModel.findById(id);
+        // if (oldFood.image) {
+        //   fs.unlink(oldFood.image, () => {}); // hapus gambar lama
+        // }
+        updatedData.image = image_url;
       }
   
       await foodModel.findByIdAndUpdate(id, updatedData);

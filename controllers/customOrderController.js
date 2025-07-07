@@ -1,10 +1,15 @@
 import customOrderModel from "../models/customOrderModel.js";
-import fs from "fs";
+import { cloudinaryInstance } from '../utils/cloudinary.js';
 
 // Add Custom Order
 const addCustomOrder = async (req, res) => {
 
-  let image_filename = `${req.file.filename}`;
+  const image_data = req.file
+  ? {
+      url: req.file.path,
+      public_id: req.file.filename, // ← ini yang dibutuhkan untuk hapus!
+    }
+  : null;
 
   const order = new customOrderModel({
     customerName: req.body.customerName,
@@ -23,7 +28,7 @@ const addCustomOrder = async (req, res) => {
     topperPrice: req.body.topperPrice,
     addOn: req.body.addOn,
     addOnPrice: req.body.addOnPrice,
-    additionalImages: image_filename,
+    additionalImages: image_data,
     pickupDate: req.body.pickupDate,
   });
 
@@ -94,13 +99,14 @@ const editCustomOrder = async (req, res) => {
     };
 
     // Jika upload file baru, hapus gambar lama
-    if (req.files && req.files.length > 0) {
-      const oldOrder = await customOrderModel.findById(id);
-      oldOrder.additionalImages.forEach(img => {
-        fs.unlink(`uploads/custom/${img}`, () => {});
-      });
+    if (req.file) {
+      const image_url = req.file.path;
+      // const oldOrder = await customOrderModel.findById(id);
+      // oldOrder.additionalImages.forEach(img => {
+      //   fs.unlink(`uploads/custom/${img}`, () => {});
+      // });
 
-      updatedData.additionalImages = req.files.map(file => file.filename);
+      updatedData.additionalImages = image_url;
     }
 
     await customOrderModel.findByIdAndUpdate(id, updatedData);
@@ -116,15 +122,14 @@ const editCustomOrder = async (req, res) => {
 const removeCustomOrder = async (req, res) => {
   try {
     const order = await customOrderModel.findById(req.body.id);
-    if (order.additionalImages) {
-      order.additionalImages.forEach(img => {
-        fs.unlink(`uploads/${img}`, () => {});
-      });
+
+    if (order?.additionalImages?.public_id) {
+      await cloudinaryInstance.uploader.destroy(order.additionalImages.public_id);
     }
 
     await customOrderModel.findByIdAndDelete(req.body.id);
-    res.json({ success: true, message: "Pesanan telah dihapus" });
 
+    res.json({ success: true, message: "Pesanan telah dihapus" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: "Gagal menghapus pesanan" });
