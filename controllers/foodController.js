@@ -21,7 +21,7 @@ const addFood = async(req,res) => {
 
     try {
         await food.save();
-        res.json({success: true, message:"Data telah ditambahkan"})
+        res.json({success: true, message:"Produk telah ditambahkan"})
     } catch(error){
         console.log(error)
         res.json({success:false, message: "Error"})
@@ -29,6 +29,39 @@ const addFood = async(req,res) => {
 
 
  }
+
+ 
+// Edit Food Item
+const editFood = async (req, res) => {
+    try {
+      const { id, name, description, price, category, stock, inStock } = req.body;
+  
+      const updatedData = {
+        name,
+        description,
+        price,
+        category,
+        stock,
+        inStock,
+      };
+  
+      // Jika ada file baru dikirim, update image
+      if (req.file) {
+        const oldFood = await foodModel.findById(id);
+        if (oldFood.image) {
+          fs.unlink(`uploads/${oldFood.image}`, () => {}); // hapus gambar lama
+        }
+        updatedData.image = req.file.filename;
+      }
+  
+      await foodModel.findByIdAndUpdate(id, updatedData);
+      res.json({ success: true, message: "Produk berhasil diperbarui" });
+  
+    } catch (error) {
+      console.log(error);
+      res.json({ success: false, message: "Terjadi kesalahan saat update" });
+    }
+  };
 
 // All Food List
 const listFood = async (req, res) => {
@@ -43,6 +76,7 @@ const listFood = async (req, res) => {
 }
 
 
+
 // Remove Food Item
 
 const removeFood = async (req, res) => {
@@ -51,7 +85,7 @@ const removeFood = async (req, res) => {
         fs.unlink(`uploads/${food.image}`, ()=>{})
 
         await foodModel.findByIdAndDelete(req.body.id);
-        res.json({success: true, message: "Data telah dihapus"})
+        res.json({success: true, message: "Produk telah dihapus"})
 
     } catch (error) {
         console.log(error);
@@ -59,4 +93,4 @@ const removeFood = async (req, res) => {
     }
 }
 
- export {addFood, listFood, removeFood}
+ export {addFood, listFood, removeFood, editFood}
