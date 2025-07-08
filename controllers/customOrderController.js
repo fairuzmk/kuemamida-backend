@@ -17,6 +17,7 @@ const addCustomOrder = async (req, res) => {
     description: req.body.description,
     basePrice: req.body.basePrice,
     totalPrice: req.body.totalPrice,
+    totalAddOn: req.body.totalAddOn,
     cakeSize: req.body.cakeSize,
     cakeShape: req.body.cakeShape,
     cakeFlavor: req.body.cakeFlavor,
@@ -26,8 +27,7 @@ const addCustomOrder = async (req, res) => {
     writingOnCake: req.body.writingOnCake,
     topper: req.body.topper,
     topperPrice: req.body.topperPrice,
-    addOn: req.body.addOn,
-    addOnPrice: req.body.addOnPrice,
+    addOns: JSON.parse(req.body.addOns),
     additionalImages: image_data,
     pickupDate: req.body.pickupDate,
   });
@@ -53,6 +53,9 @@ const listCustomOrders = async (req, res) => {
 };
 
 // Edit Custom Order
+
+
+
 const editCustomOrder = async (req, res) => {
   try {
     const {
@@ -62,6 +65,7 @@ const editCustomOrder = async (req, res) => {
       description,
       basePrice,
       totalPrice,
+      totalAddOn,
       cakeSize,
       cakeShape,
       cakeFlavor,
@@ -71,11 +75,19 @@ const editCustomOrder = async (req, res) => {
       writingOnCake,
       topper,
       topperPrice,
-      addOn,
-      addOnPrice,
+      
       pickupDate,
       status,
     } = req.body;
+
+    let addOns = [];
+    if (req.body.addOns) {
+      try {
+        addOns = JSON.parse(req.body.addOns);
+      } catch (err) {
+        console.error("Gagal parse addOns:", err);
+      }
+    }
 
     const updatedData = {
       customerName,
@@ -83,6 +95,7 @@ const editCustomOrder = async (req, res) => {
       description,
       basePrice,
       totalPrice,
+      totalAddOn,
       cakeSize,
       cakeShape,
       cakeFlavor,
@@ -92,8 +105,7 @@ const editCustomOrder = async (req, res) => {
       writingOnCake,
       topper,
       topperPrice,
-      addOn,
-      addOnPrice,
+      addOns,
       pickupDate,
       status,
     };

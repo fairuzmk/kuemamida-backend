@@ -20,14 +20,17 @@ const customOrderSchema = new mongoose.Schema({
       type: String, // nama topper
     },
     topperPrice: { type: Number, default: 0 },
-    addOn : {type: String},
-    addOnPrice: {type: Number},
-
+    addOns: [
+      {
+        addOn: { type: String, required: true },
+        addOnPrice: { type: Number, required: true },
+      },
+    ],
+    totalAddOn: {type: Number},
     additionalImages: {
       url: String,
       public_id: String,
     },
-    
     pickupDate: { type: Date},
     status: {
       type: String,
