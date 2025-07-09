@@ -9,8 +9,9 @@ const foodSchema = new mongoose.Schema({
     category: {type: String},
     varians: [
       {
-        varian: { type: String, required: true },
+        varianName: { type: String, required: true },
         varianPrice: { type: Number, required: true },
+        varianStock: { type: Number, required: true },
       },
     ],
     stock: {type: Number},
