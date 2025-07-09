@@ -7,6 +7,12 @@ const foodSchema = new mongoose.Schema({
     price: {type: Number, required: true},
     image:{type: String},
     category: {type: String},
+    varians: [
+      {
+        varian: { type: String, required: true },
+        varianPrice: { type: Number, required: true },
+      },
+    ],
     stock: {type: Number},
     rating: {type: Number},
     inStock: {type: Boolean}

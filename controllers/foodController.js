@@ -13,6 +13,7 @@ const addFood = async(req,res) => {
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
+        varians: JSON.parse(req.body.varians),
         image: image_url,
         category: req.body.category,
         stock: req.body.stock,
@@ -35,13 +36,29 @@ const addFood = async(req,res) => {
 // Edit Food Item
 const editFood = async (req, res) => {
     try {
-      const { id, name, description, price, category, stock, inStock } = req.body;
+      const { id, 
+        name, 
+        description, 
+        price, 
+        category, 
+        stock, 
+        inStock } = req.body;
   
+        let varians = [];
+        if (req.body.varians) {
+          try {
+            varians = JSON.parse(req.body.varians);
+          } catch (err) {
+            console.error("Gagal parse addOns:", err);
+          }
+        }
+
       const updatedData = {
         name,
         description,
         price,
         category,
+        varians,
         stock,
         inStock,
       };
