@@ -4,7 +4,8 @@ import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoute.js";
 import customOrderRouter from "./routes/customOrderRoute.js";
 import userRouter from "./routes/userRoute.js";
-import dotenv from 'dotenv';
+import optionRouter from "./routes/optionRoutes.js";
+
 
 
 //APP Configuration
@@ -14,15 +15,17 @@ const port = 4000
 //Middleware
 app.use(express.json())
 app.use(cors())
+app.use(express.urlencoded({ extended: true }));
 
 // DB connection
 connectDB();
 
 // API Endpoints
 app.use("/api/food", foodRouter);
-app.use("/images", express.static('uploads'))
 app.use("/api/custom-order", customOrderRouter);
-app.use("/api/user", userRouter)
+app.use("/api/user", userRouter);
+app.use('/api/options', optionRouter);
+
 
 app.get("/", (req, res)=>{
     res.send("API Working")

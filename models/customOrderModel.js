@@ -8,8 +8,8 @@ const customOrderSchema = new mongoose.Schema({
     basePrice: { type: Number, required: true },
     totalPrice: { type: Number }, // termasuk add-on
   
-    cakeSize: { type: String, enum: ['16', '18', '20', '22', 'Custom'], required: true },
-    cakeShape: { type: String, enum: ['Round', 'Square', 'Custom'] },
+    cakeSize: { type: String, required: true },
+    cakeShape: { type: String},
 
     cakeFlavor: { type: String, required: true },
     krimFlavor: {type: String},
@@ -22,8 +22,8 @@ const customOrderSchema = new mongoose.Schema({
     topperPrice: { type: Number, default: 0 },
     addOns: [
       {
-        addOn: { type: String, required: true },
-        addOnPrice: { type: Number, required: true },
+        addOn: { type: String},
+        addOnPrice: { type: Number},
       },
     ],
     totalAddOn: {type: Number},
